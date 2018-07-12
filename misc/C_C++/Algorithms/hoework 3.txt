@@ -1,0 +1,11 @@
+7: add this line before the swap: if(v[min_index] != v[i])
+
+8: easy sort and selection st are similar because they each keep track of the smallest one, and compare the rest of the objects to it.
+
+9: Because it only moves the smallest number, the sort leaves the larger numbers in place, causing the dot diagram to not show the downward-sloping structure.
+
+10: BbaC sorted swaps B nd b: abBc.
+
+11: The number of comparisons does not change based on the number of elements. There is a set number of comparisons.
+
+13: 		

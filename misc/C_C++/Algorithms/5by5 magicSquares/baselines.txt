@@ -1,0 +1,21 @@
+I was able to successfully modify the program that we did in class to count all 275,305,224 magic squares that are different up to rotations and reflections.
+ 
+1. The numbers that I gave you in class were wrong.  The number of ways to hardware a 1 into the upper-left corner is 70,944,652 -- that one was correct.  The number of ways to hardware a 1 into the slot just to the right of the upper-left corner is a bit over 101 million.  And the number of ways to hardware the one into the center of the top row is between 98 and 99 million.
+ 
+2. The approach that I took that finally worked successfully was to create 4 versions of the program from class.  For example, to hardware a 1 into slot to the right of the upper-left corner, I started with this ordering of the indices:
+ 
+1, 0, 2, 3, 4,
+
+19, 5, 17, 9, 20,
+
+21, 12, 6, 14, 22,
+
+23, 10, 18, 7, 24,
+
+11, 13, 16, 15, 8*/
+ 
+Then I kept a 1 in a[0] and made changes in the rest of the program to match up with my indices.
+ 
+Good luck!  If you can get this one, you will be one of a very, very, very small number of people in human history who was able to count the number of 5x5 magic squares.
+ 
+Professor Wheeler

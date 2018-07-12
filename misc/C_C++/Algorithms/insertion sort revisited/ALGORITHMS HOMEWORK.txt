@@ -1,0 +1,28 @@
+
+NOTES ON HOW TO SUCCESSFULLY DO IT
+
+inserting numebrs 7 and 15
+find which 1 is bigger. this will be the first insert
+15 is larger, so all the comparisons go against this one first.
+
+2 4 6 8 10 12 14 16 18 20 22 24 7 15
+     *          *
+2 4 6 7 8 10 12 14 15 16 18 20 22 24
+                      16 18 20 22 24
+        8 10 12 14 15 16 18 20 22 24
+                
+
+anything after the first insert, needs to be shifted twice. 
+
+1 find pos1
+2 find pos2
+3 shift 2 from i+1 down to pos2 +2
+4 shift 1 from pos2 down to pos1 +1
+5 v[pos1] = save1
+6 v[pos2+ 1] = save2.
+anything between the first insert and the second insert, shift once
+anything before the second insert shift 0
+
+______________________________________________________
+
+After attempting to code it, I ran into issues, which, when back tracking to fix them, I lost any progress I had made. It is unfinished and unworking

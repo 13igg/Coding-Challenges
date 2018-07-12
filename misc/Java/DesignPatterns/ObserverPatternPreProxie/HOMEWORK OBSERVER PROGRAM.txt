@@ -1,0 +1,116 @@
+subject contains many observers
+^^^
+the text doc
+docText::string
+
+classes: subject, observer, text editor gui, textDoc
+
+1 doc at a time
+
+Observer
+^^^
+ubdate() -- grabs info from centrial server
+
+central makes a socket request, he notifys people, separate thread waiting for socket to be created. 
+open and close socket as needed. EXPENSIVE RESOURCES
+
+__FOCUS ON THIS PART FIRST< MAKE IT WORK ON 1 MACHINE
+The same machiene, should be able to make 2 3 4 guis that talk to the central server, 
+make this work first!
+
+1 machine is the subject, the central server, container of the document
+
+
+subject - grabsthe string from observer, adds it to docTxt -- notifys all the observers
+O < -- non gui for this machine 
+
+^  <-- observer - each observer grabs the current state of the docText
+|
+|sends infoto the subject (string)
+observer
+
+
+
+
+Once this work, spread itout to different machines.
+
+Proxy patterns
+-video for this which is 
+sever ->> client
+
+proxy, standin for someone else
+Client ->       |server(proxy)       networking for socket          client(proxy)|    ->> real server
+	
+
+
+Client  -  - -  >       server interface
+			^	        ^
+		server proxy		server
+
+1 machine				2 machine
+Client	Server Proxy		Client Proxy	Server
+
+		socket between the two
+
+
+'''''''''''''''''''''''''''''''''''
+
+observer attaches to the subject
+observer updates the text
+
+
+subject - grabsthe string from observer, adds it to docTxt -- sends updates to all the observers
+O < -- non gui for this machine 
+
+^  <-- observer - each observer grabs the current state of the docText
+|
+|sends infoto the subject (string)
+observer
+
+''''''''''''''''''''''''''''''''''''''''
+
+	get rid of main in client proxy. 
+	client proxy is a thread		text holder -> subject
+	tell it to start waiting		GUI         -> observer
+        ^                      ^
+-subject client proxy- 		-observer client proxy-
+
+
+	     Server Proxy (ipaddress and port address of machine it is connecting with)
+sub ref this ^	        ^ gui has a reference to this
+subject SP	          observer server proxy
+calls update		  sends attach
+knows ip and
+port of the
+observers
+
+
+subject used to maintain a list of observers, 
+but now the subject server proxy (initiate updates)
+
+
+
+they all need this thread that just sits there and can handle receiving messages.
+
+
+
+
+
+in order for this to work, the server adn the server proxy must impliment this interface. 
+what ever the server does, the client can talk to server proxy or the server, it doesnt know or care.
+if it calls a method, SOMETHIGN ILL HAPPEN
+if it is talin to a server proxy, then we have all the networking stuff. create socket parse message etc
+
+there is alistener to listen for where a character was changed, character number and stuff that was changed
+
+
+Threads, flow of controll
+spreads out the flow of controll
+
+server runs on 1 machine - needs a main to begin it. 
+extra threads 
+
+
+
+
+

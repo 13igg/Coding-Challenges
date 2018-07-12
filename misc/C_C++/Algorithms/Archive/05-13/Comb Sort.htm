@@ -1,0 +1,458 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0039)http://www.yagni.com/combsort/index.php -->
+<HTML><HEAD><TITLE>Combsort</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1"><LINK 
+href="Combsort_files/wconrad.css" type=text/css rel=stylesheet>
+<META content="MSHTML 6.00.2600.0" name=GENERATOR></HEAD>
+<BODY>
+<P class=navbar><A href="http://www.yagni.com/index.html">Home</A> -&gt; 
+Combsort</P>
+<H1>Combsort - Who ever knew that bubblesort could be so good?</H1>
+<P><EM>A comparison of Quick Sort vs. Comb Sort using C++ and Ruby<BR>Plus some 
+implementations of Combsort in other languages</EM> 
+<P>by <A href="mailto:wconrad@yagni.com">Wayne Conrad</A> 
+<H2>Contents</H2>
+<UL>
+  <LI><A href="http://www.yagni.com/combsort/index.php#credits">Credits</A> 
+  <LI><A 
+  href="http://www.yagni.com/combsort/index.php#introduction">Introduction</A> 
+  <LI><A href="http://www.yagni.com/combsort/index.php#results">The Results</A> 
+  <LI>C++ 
+  <UL>
+    <LI><A href="http://www.yagni.com/combsort/index.php#cpp-quicksort">C++ 
+    Quicksort (In Place)</A> 
+    <LI><A href="http://www.yagni.com/combsort/index.php#cpp-bubblesort">C++ 
+    Bubblesort</A> 
+    <LI><A href="http://www.yagni.com/combsort/index.php#cpp-combsort">C++ 
+    Combsort</A> 
+    <LI><A href="http://www.yagni.com/combsort/index.php#cpp-builtinsort">C++ 
+    Built-in Sort</A> </LI></UL>
+  <LI>Ruby 
+  <UL>
+    <LI><A 
+    href="http://www.yagni.com/combsort/index.php#ruby-inplace-quicksort">Ruby 
+    Quicksort (In Place)</A> 
+    <LI><A 
+    href="http://www.yagni.com/combsort/index.php#ruby-copy-quicksort">Ruby 
+    Quicksort (Copy)</A> 
+    <LI><A href="http://www.yagni.com/combsort/index.php#ruby-bubblesort">Ruby 
+    Bubblesort</A> 
+    <LI><A href="http://www.yagni.com/combsort/index.php#ruby-combsort">Ruby 
+    Combsort</A> 
+    <LI><A href="http://www.yagni.com/combsort/index.php#ruby-builtinsort">Ruby 
+    Built-in Sort</A> </LI></UL>
+  <LI><A href="http://www.yagni.com/combsort/index.php#environment">Benchmark 
+  Environment</A> 
+  <LI><A href="http://www.yagni.com/combsort/index.php#other-languages">Combsort 
+  in Other Languages</A> 
+  <LI><A href="http://www.yagni.com/combsort/index.php#footnotes">Footnotes</A> 
+  <LI><A 
+  href="http://www.yagni.com/combsort/index.php#additional-reading">Additional 
+  Reading</A> 
+  <LI><A href="http://www.yagni.com/combsort/otherrubyversions.php">Appendix A — 
+  Other Ruby Versions</A> </LI></UL>
+<H2><A name=credits>Credits</A></H2>Thanks to <A 
+href="http://www.pragmaticprogrammer.com/">Dave Thomas</A>, <A 
+href="mailto:ser@germane-software.com">Sean Russell</A> and <A 
+href="http://leoscott.com/">Leo Scott</A> for their valuable suggestions and for 
+catching my goofs. Thanks to <A href="mailto:combsort@nickstoys.com">Nick 
+Estes</A> for the Perl versions, and Carl McNealy for the bash version. And 
+thanks to everyone who made their code and research available on the web (see 
+the bottom of the article to see who they are). 
+<H2><A name=introduction>Introduction</A></H2>
+<P>Every programmer knows that quicksort is the best in-memory sort in the 
+world. Look inside the sort function of almost any library and you'll find 
+quicksort. Another thing that every programmer knows is that bubblesort, the 
+"hello world" of sorts, is one of the worst in the world. But what most 
+programmers don't know is that a simple modification to bubble sort turns it 
+into combsort, a remarkably simple sort that's nearly as fast as quicksort. It's 
+so simple that you can commit it to memory and call on it any time you need a 
+sort and don't have one available. 
+<P>In this article, I will show code and benchmarks for quicksort and combsort 
+using both C++ and Ruby. You will see how quicksort compares to combsort, and 
+how Ruby compares to C++. And there's a <A 
+href="http://www.yagni.com/combsort/index.php#surprise">surprise</A> in the 
+comparison of an in-place quicksort in Ruby to one that returns a new copy of 
+the array. 
+<H2><A name=results>The Results</A></H2>
+<P>CPU seconds to sort a scrambled list of 10,000 consecutive integers 
+<P>
+<BLOCKQUOTE>
+  <TABLE summary="Summary of benchmark results" border=1>
+    <COLGROUP>
+    <COL>
+    <COL align=char char="."></COLGROUP>
+    <THEAD>
+    <TR>
+      <TH></TH>
+      <TH>C++</TH>
+      <TH>Ruby</TH></TR></THEAD>
+    <TBODY>
+    <TR>
+      <TD>Quicksort (in-place)</TD>
+      <TD><A 
+        href="http://www.yagni.com/combsort/index.php#cpp-quicksort">0.0038</A></TD>
+      <TD><A 
+        href="http://www.yagni.com/combsort/index.php#ruby-inplace-quicksort">1.73</A></TD></TR>
+    <TR>
+      <TD>Quicksort (copy)</TD>
+      <TD>n/a<A 
+        href="http://www.yagni.com/combsort/index.php#why_no_cpp_copy_quicksort"><SUP>1</SUP></A></TD>
+      <TD><A 
+        href="http://www.yagni.com/combsort/index.php#ruby-copy-quicksort">1.46</A></TD></TR>
+    <TR>
+      <TD>Combsort</TD>
+      <TD><A 
+        href="http://www.yagni.com/combsort/index.php#cpp-combsort">0.0042</A></TD>
+      <TD><A 
+        href="http://www.yagni.com/combsort/index.php#ruby-combsort">2.48</A></TD></TR>
+    <TR>
+      <TD>Bubblesort</TD>
+      <TD><A 
+        href="http://www.yagni.com/combsort/index.php#cpp-bubblesort">1.36</A></TD>
+      <TD><A 
+        href="http://www.yagni.com/combsort/index.php#ruby-bubblesort">851.15</A></TD></TR>
+    <TR>
+      <TD>built-in sort</TD>
+      <TD><A 
+        href="http://www.yagni.com/combsort/index.php#cpp-builtinsort">0.0024</A></TD>
+      <TD><A 
+        href="http://www.yagni.com/combsort/index.php#ruby-builtinsort">0.01</A></TD></TR></TBODY></TABLE></BLOCKQUOTE>
+<P>Read on (or click on the numbers) to see the code for each benchmark. 
+<H2><A name=cpp-quicksort>C++ Quicksort (In Place)</A></H2>
+<P>Here's the algorithm from <A 
+href="http://www.yagni.com/combsort/quicksort.cpp">quicksort.cpp</A>. This is 
+based upon the <A 
+href="http://www.la.unm.edu/~mbrettin/algorithms/quiksort.html">algorithm</A> 
+presented by Mark Brettin <A 
+href="http://www.yagni.com/combsort/index.php#brettin"><SUP>2</SUP></A>: 
+<BLOCKQUOTE>
+  <P><PRE><CODE>static int partition(int a[], int first, int last) {
+  int pivot = a[first];
+  int lastS1 = first;
+  int firstUnknown = first + 1;
+  while (firstUnknown &lt;= last) {
+    if (a[firstUnknown] &lt; pivot) {
+      lastS1++;
+      std::swap(a[firstUnknown], a[lastS1]);
+    }
+    firstUnknown++;
+  }
+  std::swap(a[first], a[lastS1]);
+  return lastS1;
+}
+
+static void quicksort(int a[], int first, int last) {
+  if (first &lt; last) {
+    int pivotIndex = partition(a, first, last);
+    quicksort(a, first, pivotIndex - 1);
+    quicksort(a, pivotIndex + 1, last);
+  }
+}
+
+static void quicksort(int a[], int aSize) {
+  quicksort(a, 0, aSize - 1);
+}
+</CODE></PRE></BLOCKQUOTE>
+<P>C++ Quicksort sorts 10,000 items in 0.0038 seconds. 
+<P>A naive quicksort like this one is very slow in the presence of an already 
+sorted (or almost sorted) list. There are several common optimizations for 
+quicksort that will take care of that problem. One is to look at the first, 
+middle, and last item in the list and use the one that's between the other two. 
+Another, even easier fix is to just pick the pivot point at random <A 
+href="http://www.yagni.com/combsort/index.php#littman"><SUP>3</SUP></A>. This is 
+a surprisingly good fix: Although any one randomly chosen pivot point might be 
+very bad, the odds that too many bad pivot points will be chosen is quite small. 
+In any case, because this deficiency of quicksort is so easy to fix, and because 
+it won't change the performance of quicksort much, we won't worry about already 
+sorted lists in this comparison. That lets me get on with the job of showing off 
+combsort and not spend my time optimizing quicksort for worst cases. 
+<H2><A name=cpp-bubblesort>C++ Bubblesort</A></H2>Here's the algorithm from <A 
+href="http://www.yagni.com/combsort/bubblesort.cpp">bubblesort.cpp</A>, one of 
+the worst sorts in the world <A 
+href="http://www.yagni.com/combsort/index.php#when_is_bubblesort_good"><SUP>4</SUP></A>. 
+
+<BLOCKQUOTE>
+  <P><PRE><CODE>static void bubblesort(int a[], int aSize) {
+  for (;;) {
+    bool swapped = false;
+    for (int i = 0; i &lt; aSize - 1; i++) {
+      int j = i + 1;
+      if (a[i] &gt; a[j]) {
+        std::swap(a[i], a[j]);
+        swapped = true;
+      }
+    }
+    if (!swapped)
+      break;
+  }
+}
+</CODE></PRE></BLOCKQUOTE>
+<P>C++ bubblesort sorts 10,000 items in 1.36 seconds. 
+<P>
+<H2><A name=cpp-combsort>C++ Combsort</A></H2>
+<P>Here's the algorithm from <A 
+href="http://www.yagni.com/combsort/combsort.cpp">combsort.cpp</A>. The 
+differences from C++ bubblesort are <B>highlighted</B>. 
+<BLOCKQUOTE>
+  <P><PRE><CODE><B>static int newGap(int gap) {
+  gap = (gap * 10) / 13;
+  if (gap == 9 || gap == 10)
+    gap = 11;
+  if (gap &lt; 1)
+    gap = 1;
+  return gap;
+}</B>
+
+static void combsort(int a[], int aSize) {
+  <B>int gap = aSize;</B>
+  for (;;) {
+    <B>gap = newGap(gap);</B>
+    bool swapped = false;
+    for (int i = 0; i &lt; aSize - <B>gap</B>; i++) {
+      int j = i + <B>gap</B>;
+      if (a[i] &gt; a[j]) {
+        std::swap(a[i], a[j]);
+        swapped = true;
+      }
+    }
+    if (<B>gap == 1 &amp;&amp;</B> !swapped)
+      break;
+  }
+}
+</CODE></PRE></BLOCKQUOTE>
+<P>C++ combsort sorts 10,000 items in 0.0042 seconds, only 1.1 times longer than 
+C++ quicksort. It's amazing that such a simple change to bubblesort makes it 
+nearly as good as quicksort. What's more, combsort doesn't need any special code 
+to keep from degenerating in the presence of already sorted lists. 
+<P>Combsort starts out comparing items that are far apart. Then it makes the gap 
+smaller and does it again. In the algorithm's last passes the gap is 1, making 
+it act identical to bubblesort. That makes it easy to see that this algorithm is 
+correct, since we know that bubblesort is correct and this algorithm always 
+turns into bubblesort. 
+<P>The <CODE>newGap</CODE> function contains some magic spells. Stepehn Lacey 
+and Richard Box showed that the gap should be divided by 1.3 on each pass. They 
+also found that gaps of 9 and 10 are bad and are best replaced with a gap of 
+11<A 
+href="http://www.yagni.com/combsort/index.php#lacey_and_box"><SUP>5</SUP></A>. 
+(Further research by Jim Veale suggests that a carefully made table of gaps can 
+improve performance further<A 
+href="http://www.yagni.com/combsort/index.php#veale"><SUP>6</SUP></A>). 
+<H2><A name=cpp-builtinsort>C++ Built-in Sort</A></H2>Here's the algorithm from 
+<A href="http://www.yagni.com/combsort/builtinsort.cpp">builtinsort.cpp</A>. 
+<BLOCKQUOTE>
+  <P><PRE><CODE>static void builtinsort(int a[], int aSize)
+{
+  sort (a, a + aSize);
+}
+</CODE></PRE></BLOCKQUOTE>
+<P>This executes in 0.0024 seconds, faster than any other sort we benchmark 
+here. I only looked inside the STL code long enough to become horribly confused, 
+but it's obvious from the speedy execution that S++'s implementation of STL is 
+using QuickSort. It's probably also using the optimization of using insertion 
+sort for short arrays. 
+<H2><A name=ruby-inplace-quicksort>Ruby Quicksort (In-place)</A></H2>Here's the 
+algorithm from <A 
+href="http://www.yagni.com/combsort/InPlaceQuickSort.rb">InPlaceQuickSort.rb</A>. 
+This is based upon the <A 
+href="http://www.la.unm.edu/~mbrettin/algorithms/quiksort.html">algorithm</A> 
+presented by Mark Brettin <A 
+href="http://www.yagni.com/combsort/index.php#brettin"><SUP>2</SUP></A>. 
+<BLOCKQUOTE>
+  <P><PRE><CODE>def partition(a, first, last)
+  pivot = a[first]
+  lastS1 = first
+  firstUnknown = first + 1
+  while firstUnknown &lt;= last do
+    if a[firstUnknown] &lt; pivot
+      lastS1 += 1
+      a.swap(firstUnknown, lastS1)
+    end
+    firstUnknown += 1
+  end
+  a.swap(first, lastS1)
+  lastS1
+end
+
+def quicksort(a, first = 0, last = a.size - 1)
+  if first &lt; last 
+    pivotIndex = partition(a, first, last)
+    quicksort(a, first, pivotIndex - 1)
+    quicksort(a, pivotIndex + 1, last)
+  end
+end
+</CODE></PRE></BLOCKQUOTE>
+<P>The Ruby in-place quicksort runs in 1.73 seconds, a whopping 453 times what 
+C++ in-place quicksort takes. It's even slower than C++ bubblesort. Ruby is much 
+slower than C++ at hand-coded sorts (although Ruby's built-in sort doesn't do 
+too bad). <A name=surprise></A>
+<H2><A name=ruby-copy-quicksort>Ruby Quicksort (Copy)</A></H2>
+<P>Out of curiosity, I tried implementing the version of quicksort that returns 
+a copy of the array rather than modifying it in place. This algorithm is quite 
+beautiful, but seems like it would be much slower than an in-place sort. I 
+wanted to see how much slower. Here's the algorithm (source unknown <A 
+href="http://www.yagni.com/combsort/index.php#source_unknown"><SUP>7</SUP></A>) 
+from <A href="http://www.yagni.com/combsort/QuickSort.rb">QuickSort.rb</A>: 
+<BLOCKQUOTE>
+  <P><PRE><CODE>def quicksort(a)
+  return a if a.size &lt;= 1
+  pivot = a[0]
+  quicksort(a.select {|value| value &lt; pivot}) + 
+    a.select {|value| value == pivot} +
+    quicksort(a.select {|value| value &gt; pivot})
+end
+</CODE></PRE></BLOCKQUOTE>
+<P>This runs in 1.46 seconds. And there's the surprise: It's <EM>faster</EM>, 
+not slower than in-place QuickSort's 1.73 seconds. My common sense says that 
+this algorithm, which is making and concatenating lots of little arrays, should 
+be slower than the in-place algorithm. And yet it's not. Perhaps the select 
+method is so fast that it makes up for all of the array copies and 
+concatenations. 
+<H2><A name=ruby-bubblesort>Ruby Bubblesort</A></H2>Here's the algorithm from <A 
+href="http://www.yagni.com/combsort/BubbleSort.rb">BubbleSort.rb</A>: 
+<BLOCKQUOTE>
+  <P><PRE><CODE>def bubblesort(a)
+  loop do
+    swapped = false
+    (a.size - 1).times do |i|
+      j = i + 1
+      if a[i] &gt; a[j]
+	a.swap(i, j)
+	swapped = true
+      end
+    end
+    break if !swapped
+  end
+end
+</CODE></PRE></BLOCKQUOTE>
+<P>This runs in 851.15 seconds. Yikes! 
+<H2><A name=ruby-combsort>Ruby Combsort</A></H2>Here's the algorithm from <A 
+href="http://www.yagni.com/combsort/CombSort.rb">CombSort.rb</A>. The 
+differences from Ruby bubblesort are <B>highlighted</B>. 
+<BLOCKQUOTE>
+  <P><PRE><CODE>def combsort(a)
+  b = a
+  <B>gap = b.size</B>
+  loop do
+    <B>gap = gap * 10 / 13
+    gap = 11 if gap == 9 || gap == 10
+    gap = 1 if gap &lt; 1</B>
+    swapped = false
+    (b.size - <B>gap</B>).times do |i|
+      j = i + <B>gap</B>
+      if b[i] &gt; b[j]
+	b.swap(i, j)
+	swapped = true
+      end
+    end
+    break if <B>gap == 1 &amp;&amp;</B> !swapped
+  end
+  b
+end
+</CODE></PRE></BLOCKQUOTE>
+<P>This runs in 2.48 seconds, more than twice as slow as Ruby Quicksort but 
+still in the running as a very fast sort algorithm. 
+<H2><A name=ruby-builtinsort>Ruby Built-in Sort</A></H2>Here's the algorithm 
+from <A href="http://www.yagni.com/combsort/BuiltInSort.rb">BuiltInSort.rb</A>: 
+<BLOCKQUOTE>
+  <P><PRE><CODE>def builtInSort(a)
+  a.sort!
+end
+</CODE></PRE></BLOCKQUOTE>This executes in 0.01 seconds, 4 times what C++'s 
+built-in sort takes. Internally, <CODE>Array.sort!</CODE> (the method being 
+called here) is using quicksort. It's slower than C++'s quicksort because 
+everything in Ruby is an object. Each integer in the array is a separate object, 
+and the array contains references to those objects. Considering all that, it's 
+pretty impressive that Ruby's built-in sort is that fast. 
+<H2><A name=environment>Benchmark Environment</A></H2>
+<P>The benchmarks were run on this computer: 
+<BLOCKQUOTE>
+  <TABLE border=1>
+    <TBODY>
+    <TR>
+      <TD>Model</TD>
+      <TD>Dell® Inspiron 4000</TD></TR>
+    <TR>
+      <TD>CPU</TD>
+      <TD>Intel® P3/550<A 
+        href="http://www.yagni.com/combsort/index.php#speedstep_disabled"><SUP>8</SUP></A></TD></TR>
+    <TR>
+      <TD>RAM</TD>
+      <TD>128MB<A 
+        href="http://www.yagni.com/combsort/index.php#no_swap"><SUP>9</SUP></A></TD></TR>
+    <TR>
+      <TD>Operating system</TD>
+      <TD>Linux 2.2.19</TD></TR></TBODY></TABLE></BLOCKQUOTE>
+<P>The C++ benchmarks were compiled with g++ 2.95.2 using -O3 (full frontal 
+optimization). A typical compile command is: 
+<BLOCKQUOTE>
+  <P><PRE><CODE>g++ -o quicksort -O3 quicksort.cpp</CODE></PRE></BLOCKQUOTE>
+<P>The Ruby benchmarks were run with Ruby 1.6.4. 
+<H2><A name=other-languages>Combsort in Other Languages</A></H2>
+<P>Here's combsort in some other languages. These aren't benchmarks, just the 
+sort and a small "main" (or whatever passes for a "main") to show that it works. 
+
+<UL class=plainlist>
+  <LI><A href="http://www.yagni.com/combsort/combsort.sh">Bash</A> 
+  <LI><A href="http://www.yagni.com/combsort/combsort.bas">Basic</A> 
+  <LI><A href="http://www.yagni.com/combsort/combsort.c">C</A> 
+  <LI><A href="http://www.yagni.com/combsort/forth/index.php">Forth</A> 
+  <LI><A href="http://www.yagni.com/combsort/combsort.f">Fortran 77</A> 
+  <LI><A href="http://www.yagni.com/combsort/i386/index.php">i386 assembly</A> 
+  <LI><A href="http://www.yagni.com/combsort/Combsort.java">Java</A> 
+  <LI><A href="http://www.yagni.com/combsort/combsort.pas">Pascal</A> 
+  <LI><A href="http://www.yagni.com/combsort/combsort.pl">Perl</A> 
+  <LI><A href="http://www.yagni.com/combsort/combsort-obfuscated.pl">Perl 
+  (obfuscated)</A> <A 
+  href="http://www.yagni.com/combsort/index.php#wacked_perl_hacker"><SUP>10</SUP></A> 
+
+  <LI><A href="http://www.yagni.com/combsort/combsort.php4">PHP</A> 
+  <LI><A href="http://www.yagni.com/combsort/combsort.py">Python</A> </LI></UL>
+<H2>Appendices</H2>
+<UL class=plainlist>
+  <LI><A href="http://www.yagni.com/combsort/otherrubyversions.php">Appendix A — 
+  Other Ruby Versions</A> </LI></UL>
+<H2><A name=footnotes>Footnotes</A></H2>
+<P><A name=why_no_cpp_copy_quicksort><SUP>1</SUP></A>I didn't do a benchark of a 
+C++ quicksort that returns a copy of the array (rather than modifying it in 
+place) because it seems too hard to bother with. 
+<P><A name=brettin><SUP>2</SUP></A><A 
+href="http://www.la.unm.edu/~mbrettin/algorithms/quiksort.html"> Quick Sort 
+Algorithm / Analysis</A> by Mark Brettin. 
+<P><A name=littman><SUP>3</SUP></A><A 
+href="http://www.cs.duke.edu/education/courses/cps130/fall98/lectures/lect06/lect06.html"> 
+Analysis of Quicksort (6)</A>, Michael L. Littman, September 15th, 1998. 
+<P><A name=when_is_bubblesort_good><SUP>4</SUP></A>Bubblesort is actually not 
+too bad if the list is nearly sorted or if the list is very small. For any other 
+case, it's pretty bad. 
+<P><A name=lacey_and_box><SUP>5</SUP></A><A 
+href="http://cs.clackamas.cc.or.us/molatore/cs260Spr01/combsort.htm"> A Fast 
+Easy Sort</A>, Stephen Lacey and Richard Box. 
+<P><A name=veale><SUP>6</SUP></A><A 
+href="http://world.std.com/~jdveale/combsort.htm"> An Improved Comb Sort with 
+Pre-Defined Gap Table</A> by Jim Veale. 
+<P><A name=source_unknown><SUP>7</SUP></A> I don't remember where I got this 
+algorithm from, but I doubt it's mine. I vaguely remember that quicksort in 
+Haskell is as beautiful, so I might have stolen this from a Haskell example. 
+<P><A name=speedstep_disabled><SUP>8</SUP></A>The laptop's CPU has Intel® 
+SpeedStep™ technology, which just means that it can run faster when the laptop 
+is plugged into the wall. However, I've configured the laptop to always run at 
+the same speed — battery speed — even when it's plugged in. When the laptop runs 
+at full speed, the exhaust from its cooling fan cooks my leg. A lucky 
+side-effect of disabling SpeedStep is that the benchmarks always run at the same 
+speed whether I'm mobile or plugged in. 
+<P><A name=no_swap><SUP>9</SUP></A>All benchmarks ran entirely out of RAM. No 
+swap file was harmed in the running of these benchmarks. 
+<P><A name=wacked_perl_hacker><SUP>10</SUP></A><A 
+href="mailto:combsort@nickstoys.com">Nick Estes</A>, the hacker behind the Perl 
+version, insisted that I include an obfuscated version as well. Do Perl programs 
+always come in readable/unreadable pairs? 
+<H2><A name=additional-reading>Additional Reading</A></H2>
+<P>Richard Box and Stephen Lacey, "Byte magazine," April 1991. 
+<P><A href="http://www.cobolreport.com/columnists/leif/07242000.htm">Sorting 
+Algorithms</A> by Leif Svalgaard, <A 
+href="http://www.cobolreport.com/">CobolReport.com</A>. Comparisons of sorting 
+algorithms, including combsort. 
+<P class=copyrightbar>Content of this site is © <A 
+href="mailto:wconrad@yagni.com">Wayne Conrad</A>. All rights reserved. 
+</P></BODY></HTML>
