@@ -1,10 +1,10 @@
 # Coding-Challenges
-Sumation of problems from HackerRank, Leet-Code, Project Euler
+Sumation of problems from HackerRank, Leet-Code, Project Euler.
 
-##HackerRank
+## HackerRank
 https://www.hackerrank.com/matthew_ciaglia
 
-##LeetCode
+## LeetCode
 
-##MISC
+## MISC
 There are alot of nested projects, datastructures, design patterns, and college assignments in this location dating back to 2011. I would go through mentioning them all, but who is going to fuss through here anyways?
